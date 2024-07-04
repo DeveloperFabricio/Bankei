@@ -1,4 +1,5 @@
 ﻿using Bankei.Domain.Entities;
+using Bankei.Domain.Exceptions;
 using Bankei.Domain.Repositories;
 using MediatR;
 using System;
@@ -20,21 +21,29 @@ namespace Bankei.Application.Commands.SacarInvestimentos
 
         public async Task<Unit> Handle(SacarInvestimentoCommand request, CancellationToken cancellationToken)
         {
-            var investimento = await _investimentoRepository.ObterPorId(request.InvestimentoId);
-            if (investimento == null)
+            try
             {
-                throw new Exception("Investimento não encontrado.");
+                var investimento = await _investimentoRepository.ObterPorId(request.InvestimentoId);
+                if (investimento == null)
+                {
+                    throw new NotFoundException("Investimento não encontrado.");
+                }
+
+                investimento.Sacar();
+
+                await _investimentoRepository.Atualizar(investimento);
+
+                var valorInicial = investimento.ValorInicial;
+                var valorComJuros = CalcularJuros(investimento);
+                var totalSacado = CalcularTotalSacado(investimento);
+
+                return Unit.Value;
             }
-
-            investimento.Sacar();
-
-            await _investimentoRepository.Atualizar(investimento);
-
-            var valorInicial = investimento.ValorInicial;
-            var valorComJuros = CalcularJuros(investimento); 
-            var totalSacado = CalcularTotalSacado(investimento); 
-
-            return Unit.Value;
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao sacar o investimento.", ex);
+            }
+            
         }
 
         public decimal CalcularJuros(Investimento investimento)
