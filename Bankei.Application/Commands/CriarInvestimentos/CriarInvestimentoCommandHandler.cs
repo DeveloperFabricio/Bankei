@@ -14,6 +14,11 @@ namespace Bankei.Application.Commands.CriarInvestimentos
         }
         public async Task<int> Handle(CriarInvestimentoCommand request, CancellationToken cancellationToken)
         {
+            if (request.ValorInicial <= 0)
+            {
+                throw new ArgumentException("O valor inicial do investimento deve ser maior que zero.");
+            }
+
             var investimento = new Investimento(request.ValorInicial, request.DataInvestimento);
 
             await _investimentoRepository.Adicionar(investimento);

@@ -21,9 +21,12 @@ namespace Bankei.Application.Queries.ObterInvestimentos
         public async Task<InvestimentoDTO> Handle(ObterInvestimentoQuery request, CancellationToken cancellationToken)
         {
             var investimento = await _investimentoRepository.ObterPorId(request.InvestimentoId);
+            if (investimento == null)
+            {
+                throw new InvalidOperationException("Investimento não encontrado.");
+            }
 
             var dataConsulta = request.Data ?? DateTime.UtcNow;
-
             var saldo = investimento.CalcularSaldoParaData(dataConsulta);
 
             var investimentoDTO = new InvestimentoDTO
@@ -37,4 +40,5 @@ namespace Bankei.Application.Queries.ObterInvestimentos
             return investimentoDTO;
         }
     }
+
 }

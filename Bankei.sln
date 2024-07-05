@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bankei.API", "Bankei.API\Bankei.API.csproj", "{949F8838-D7ED-4F6F-8839-358F04149A91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bankei.API", "Bankei.API\Bankei.API.csproj", "{949F8838-D7ED-4F6F-8839-358F04149A91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bankei.Domain", "Bankei.Domain\Bankei.Domain.csproj", "{2A5422AB-11F2-4810-B622-E4E1F5E2C2C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bankei.Domain", "Bankei.Domain\Bankei.Domain.csproj", "{2A5422AB-11F2-4810-B622-E4E1F5E2C2C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bankei.Application", "Bankei.Application\Bankei.Application.csproj", "{57C22754-8D16-42B1-8E80-0E55368855BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bankei.Application", "Bankei.Application\Bankei.Application.csproj", "{57C22754-8D16-42B1-8E80-0E55368855BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bankei.Infrastructure", "Bankei.Infrastructure\Bankei.Infrastructure.csproj", "{FD51BEF5-9724-4AB8-A837-0D1E77099FEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bankei.Infrastructure", "Bankei.Infrastructure\Bankei.Infrastructure.csproj", "{FD51BEF5-9724-4AB8-A837-0D1E77099FEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bankei.UnitTests", "Bankei.UnitTests\Bankei.UnitTests.csproj", "{10FE1BBD-86F6-46A8-BDCB-D1746F725784}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{FD51BEF5-9724-4AB8-A837-0D1E77099FEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD51BEF5-9724-4AB8-A837-0D1E77099FEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD51BEF5-9724-4AB8-A837-0D1E77099FEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10FE1BBD-86F6-46A8-BDCB-D1746F725784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10FE1BBD-86F6-46A8-BDCB-D1746F725784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10FE1BBD-86F6-46A8-BDCB-D1746F725784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10FE1BBD-86F6-46A8-BDCB-D1746F725784}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
