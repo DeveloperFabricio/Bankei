@@ -48,3 +48,5 @@ Exemplo:
 | 2   | R$ 1.000,00 | R$ 11,73 | R$ 23,33 | R$ 1.023,33 |
 | 3   | R$ 1.000,00 | R$ 11,87 | R$ 35,21 | R$ 1.035,21 |
 | 4   | R$ 1.000,00 | R$ 12,01 | R$ 47,21 | R$ 1.047,21 |
+
+![Testes][https://github.com/DeveloperFabricio/Bankei/blob/master/Bankei.png?raw=true]
