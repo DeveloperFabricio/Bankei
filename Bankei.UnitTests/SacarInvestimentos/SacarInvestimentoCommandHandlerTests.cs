@@ -22,52 +22,68 @@ namespace Bankei.UnitTests.SacarInvestimentos
         [Fact]
         public async Task Handle_ValidRequest_SacaInvestimento()
         {
-           
+
             var investimento = new Investimento(1000, DateTime.UtcNow.AddMonths(-6));
             SetInvestimentoId(investimento, 1);
             _investimentoRepositoryMock.Setup(repo => repo.ObterPorId(It.IsAny<int>()))
                 .ReturnsAsync(investimento);
 
-            var command = new SacarInvestimentoCommand(1);
+            var valorSaque = 1000; 
+            var dataSaque = DateTime.UtcNow;
 
-           
+            var command = new SacarInvestimentoCommand(1, valorSaque, dataSaque);
+
+            // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
-            
-            _investimentoRepositoryMock.Verify(repo => repo.Atualizar(It.IsAny<Investimento>()), Times.Once);
+            // Assert
             Assert.Equal(Unit.Value, result);
+            _investimentoRepositoryMock.Verify(repo => repo.Atualizar(investimento), Times.Once);
+            Assert.True(investimento.FoiSacado);
+            Assert.Equal(0, investimento.Saldo);
         }
 
         [Fact]
         public async Task Handle_InvestimentoNotFound_ThrowsNotFoundException()
         {
-            
+
+            var investimento = new Investimento(1000, DateTime.UtcNow.AddMonths(-6));
+            SetInvestimentoId(investimento, 1);
             _investimentoRepositoryMock.Setup(repo => repo.ObterPorId(It.IsAny<int>()))
                 .ReturnsAsync((Investimento)null);
 
-            var command = new SacarInvestimentoCommand(1);
+            var valorSaque = 500; 
+            var dataSaque = DateTime.UtcNow; 
 
-            
-            await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
+            var command = new SacarInvestimentoCommand(1, valorSaque, dataSaque); 
+
+            // Act e Assert
+            var exception = await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
+            Assert.Equal("Investimento não encontrado.", exception.Message);
         }
 
         [Fact]
         public async Task Handle_UnexpectedError_ThrowsException()
         {
-            
+
             var investimento = new Investimento(1000, DateTime.UtcNow.AddMonths(-6));
             SetInvestimentoId(investimento, 1);
             _investimentoRepositoryMock.Setup(repo => repo.ObterPorId(It.IsAny<int>()))
                 .ReturnsAsync(investimento);
 
             _investimentoRepositoryMock.Setup(repo => repo.Atualizar(It.IsAny<Investimento>()))
-                .ThrowsAsync(new Exception("Database update error"));
+                .ThrowsAsync(new InvalidOperationException("Erro de atualização do banco de dados"));
 
-            var command = new SacarInvestimentoCommand(1);
+            var valorSaque = 1000; 
+            var dataSaque = DateTime.UtcNow;
 
-           
-            var exception = await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
-            Assert.Equal("Database update error", exception.Message);
+            var command = new SacarInvestimentoCommand(1, valorSaque, dataSaque);
+
+            // Act
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
+
+            // Assert
+            Assert.Equal("Erro de atualização do banco de dados", exception.Message);
         }
 
         private void SetInvestimentoId(Investimento investimento, int id)

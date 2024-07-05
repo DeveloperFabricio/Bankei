@@ -21,9 +21,15 @@ namespace Bankei.Application.Queries.ObterInvestimentos
         public async Task<InvestimentoDTO> Handle(ObterInvestimentoQuery request, CancellationToken cancellationToken)
         {
             var investimento = await _investimentoRepository.ObterPorId(request.InvestimentoId);
+
             if (investimento == null)
             {
                 throw new InvalidOperationException("Investimento não encontrado.");
+            }
+
+            if (request.Data.HasValue && request.Data.Value < investimento.DataInvestimento)
+            {
+                throw new ArgumentException("A data não pode ser inferior à data do investimento.");
             }
 
             var dataConsulta = request.Data ?? DateTime.UtcNow;

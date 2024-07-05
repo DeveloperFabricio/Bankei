@@ -22,18 +22,44 @@ namespace Bankei.Application.Commands.SacarInvestimentos
         public async Task<Unit> Handle(SacarInvestimentoCommand request, CancellationToken cancellationToken)
         {
             var investimento = await _investimentoRepository.ObterPorId(request.InvestimentoId);
+
             if (investimento == null)
             {
                 throw new NotFoundException("Investimento não encontrado.");
             }
 
-            investimento.Sacar();
+            // Verificar se o saque está sendo feito na data atual
+            if (request.DataSaque.Date != DateTime.UtcNow.Date)
+            {
+                throw new InvalidOperationException("O saque só pode ser realizado na data atual.");
+            }
 
-            await _investimentoRepository.Atualizar(investimento);
+            // Verificar se o saque é parcial ou maior do que o valor disponível
+            if (request.ValorSaque <= 0 || request.ValorSaque > investimento.ValorInicial)
+            {
+                throw new InvalidOperationException("O valor do saque é inválido.");
+            }
+
+            // Verificar se o investimento já foi sacado antes
+            if (investimento.FoiSacado)
+            {
+                throw new InvalidOperationException("Este investimento já foi sacado anteriormente.");
+            }
 
             var valorInicial = investimento.ValorInicial;
             var valorComJuros = CalcularJuros(investimento);
             var totalSacado = CalcularTotalSacado(investimento);
+
+            if (request.ValorSaque <= 0 || request.ValorSaque != investimento.Saldo)
+            {
+                throw new InvalidOperationException("O valor do saque é inválido.");
+            }
+
+            investimento.AtualizarSaldo(request.ValorSaque);
+
+            investimento.Sacar();
+                       
+            await _investimentoRepository.Atualizar(investimento);
 
             return Unit.Value;
         }

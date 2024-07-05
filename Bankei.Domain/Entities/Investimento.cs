@@ -46,7 +46,15 @@
                 throw new InvalidOperationException("O investimento já foi sacado.");
 
             FoiSacado = true;
-            Saldo = 0; 
+            Saldo = 0; // Ajuste o saldo para 0, já que o saque foi total
+        }
+
+        public void AtualizarSaldo(decimal valorSaque)
+        {
+            if (valorSaque != Saldo) // Não permitir saques parciais
+                throw new InvalidOperationException("O valor do saque é inválido.");
+
+            Saldo -= valorSaque;
         }
 
         public decimal CalcularJuros(Investimento investimento)
